@@ -1,0 +1,22 @@
+# Finsecure Toolkit - Dependencies
+# CY4053 Final Project - PayBuddy Security Assessment
+# Finsecure Toolkit - Dependencies
+# CY4053 Final Project
+
+# HTTP libraries
+aiohttp>=3.8.0
+requests>=2.28.0
+
+# Packet capture
+scapy>=2.4.5
+
+# Report generation
+python-docx>=0.8.11
+reportlab>=3.6.0
+
+# Data visualization
+matplotlib>=3.5.0
+
+# Web UI
+Flask>=2.3.0
+Werkzeug>=2.3.0

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Load Testing - Finsecure{% endblock %}
+{% block body_class %}module-page module-load-testing{% endblock %}
+
+{% block content %}
+<div class="module-page container-fluid px-4 pt-4">
+    {% include "status_header.html" %}
+
+    <div class="row g-4 mt-2">
+        <div class="col-lg-6 col-xl-5">
+            <div class="card tool-card h-100">
+                <div class="card-header bg-danger text-white d-flex align-items-center">
+                    <i class="bi bi-speedometer2 me-2"></i>
+                    <h5 class="mb-0">Load Testing</h5>
+                </div>
+                <div class="card-body">
+                    <form id="stressForm" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Target URL</label>
+                            <input type="text" class="form-control" name="target" placeholder="http://example.com" required>
+                            <div class="invalid-feedback">Please enter a target URL</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label fw-bold">Clients</label>
+                                <input type="number" class="form-control" name="clients" value="50" min="1" max="200">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label fw-bold">Duration (sec)</label>
+                                <input type="number" class="form-control" name="duration" value="60" min="1" max="300">
+                            </div>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress mb-2">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="operation-status"></div>
+                        <button type="submit" class="btn btn-danger w-100" id="stressBtn" {{ 'disabled' if not identity_valid or not consent_valid }}>
+                            <i class="bi bi-play-fill me-2"></i>Start Test
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-xl-7">
+            <div class="card glass-card h-100">
+                <div class="card-header bg-transparent border-0 text-light d-flex align-items-center">
+                    <i class="bi bi-activity me-2"></i>
+                    <h6 class="mb-0">Performance Overview & Examples</h6>
+                </div>
+                <div class="card-body text-light">
+                    <p class="small mb-2">Use safe HTTP targets listed in <code>consent.txt</code> for load tests:</p>
+                    <ul class="small mb-2">
+                        <li><code>http://localhost:8000</code> – your own lab API/server</li>
+                        <li><code>http://httpbin.org</code> – light test traffic only</li>
+                        <li><code>http://127.0.0.1:5000</code> – your local Finsecure web UI</li>
+                    </ul>
+                    <p class="small mb-0">
+                        1) Pick an approved URL from <code>consent.txt</code>.<br>
+                        2) Choose modest clients/duration (e.g. 10 clients, 30s) within limits.<br>
+                        3) Inspect response time and status-code plots in the generated results.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "toast.html" %}
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}
+
+

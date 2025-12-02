@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Report Generator - Finsecure{% endblock %}
+{% block body_class %}module-page module-report-generator{% endblock %}
+
+{% block content %}
+<div class="module-page container-fluid px-4 pt-4">
+    {% include "status_header.html" %}
+
+    <div class="row g-4 mt-2">
+        <div class="col-lg-6 col-xl-5">
+            <div class="card tool-card h-100">
+                <div class="card-header bg-primary text-white d-flex align-items-center">
+                    <i class="bi bi-file-earmark-text me-2"></i>
+                    <h5 class="mb-0">Report Generator</h5>
+                </div>
+                <div class="card-body">
+                    <form id="reportForm" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Input Directory</label>
+                            <input type="text" class="form-control" name="input_dir" value="output" placeholder="output">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Format</label>
+                            <select class="form-select" name="format">
+                                <option value="both">Both (DOCX + PDF)</option>
+                                <option value="docx">DOCX Only</option>
+                                <option value="pdf">PDF Only</option>
+                            </select>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress mb-2">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="operation-status"></div>
+                        <button type="submit" class="btn btn-primary w-100" id="reportBtn" {{ 'disabled' if not identity_valid }}>
+                            <i class="bi bi-file-earmark-arrow-down me-2"></i>Generate Report
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-xl-7">
+            <div class="card glass-card h-100">
+                <div class="card-header bg-transparent border-0 text-light d-flex align-items-center">
+                    <i class="bi bi-journal-check me-2"></i>
+                    <h6 class="mb-0">Reporting & Examples</h6>
+                </div>
+                <div class="card-body text-light">
+                    <p class="small mb-2">Reports consolidate results from scans against approved targets in <code>consent.txt</code>.</p>
+                    <p class="small mb-1">Typical workflow:</p>
+                    <ul class="small mb-2">
+                        <li>Run port scans (e.g. <code>localhost</code>, <code>example.com</code>), stress tests, and discovery against allowed targets.</li>
+                        <li>Leave <code>input_dir</code> as <code>output</code> to include all recent module JSON files.</li>
+                    </ul>
+                    <p class="small mb-0">
+                        1) Choose the output directory (usually <code>output/</code>).<br>
+                        2) Select report format (DOCX, PDF, or both).<br>
+                        3) Generate and then open the report files to review consolidated findings.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "toast.html" %}
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}
+
+

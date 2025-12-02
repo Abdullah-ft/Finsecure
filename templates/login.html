@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In - Finsecure{% endblock %}
+
+{% block body_class %}auth-page{% endblock %}
+
+{% block content %}
+<div class="auth-overlay d-flex align-items-center justify-content-center">
+    <div class="auth-card-wrapper">
+        <div class="card auth-card border-0">
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="auth-logo mb-2">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+                    <h4 class="mb-0 text-white">Finsecure Toolkit</h4>
+                </div>
+
+                {% if error %}
+                <div class="alert alert-danger border-0 shadow-sm mb-3">
+                    <i class="bi bi-x-circle me-1"></i>{{ error }}
+                </div>
+                {% endif %}
+
+                <form method="post" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-light-50">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                            <input type="text" name="username" class="form-control" autocomplete="off" required>
+                            <div class="invalid-feedback">Enter username.</div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold text-light-50">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-key"></i></span>
+                            <input type="password" name="password" class="form-control" required>
+                            <div class="invalid-feedback">Enter password.</div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 btn-lg" {% if not identity_valid %}disabled{% endif %}>
+                        <span class="me-2"><i class="bi bi-box-arrow-in-right"></i></span>Sign In
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

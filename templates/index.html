@@ -1,0 +1,353 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Finsecure Toolkit{% endblock %}
+
+{% block extra_head %}
+<style>
+    .tool-card {
+        transition: all 0.3s ease;
+        border: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        height: 100%;
+    }
+    .tool-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+    .tool-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+    .status-badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    .status-valid {
+        background: #d4edda;
+        color: #155724;
+    }
+    .status-invalid {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    .progress-container {
+        display: none;
+        margin-top: 1rem;
+    }
+    .operation-status {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 8px;
+        display: none;
+    }
+    .operation-success {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+    }
+    .operation-error {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+    }
+    .operation-info {
+        background: #d1ecf1;
+        border: 1px solid #bee5eb;
+        color: #0c5460;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <!-- Status Dashboard -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 text-center mb-3 mb-md-0">
+                            <div class="d-flex flex-column align-items-center">
+                                <i class="bi bi-{{ 'check-circle-fill text-success' if identity_valid else 'x-circle-fill text-danger' }} fs-1 mb-2"></i>
+                                <span class="status-badge {{ 'status-valid' if identity_valid else 'status-invalid' }}">
+                                    {{ 'Valid' if identity_valid else 'Invalid' }}
+                                </span>
+                                <small class="text-muted mt-1">Identity</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center mb-3 mb-md-0">
+                            <div class="d-flex flex-column align-items-center">
+                                <i class="bi bi-{{ 'check-circle-fill text-success' if consent_valid else 'x-circle-fill text-danger' }} fs-1 mb-2"></i>
+                                <span class="status-badge {{ 'status-valid' if consent_valid else 'status-invalid' }}">
+                                    {{ 'Valid' if consent_valid else 'Invalid' }}
+                                </span>
+                                <small class="text-muted mt-1">Consent</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            {% if identity_valid and team_info %}
+                            <div class="ps-md-3 border-start">
+                                <h6 class="mb-1"><strong>Team:</strong> {{ team_info.get('team_name', 'N/A') }}</h6>
+                                <p class="mb-0 text-muted small">
+                                    <strong>Members:</strong> {{ team_info.get('members', [])|length }} 
+                                    | <strong>Approved Targets:</strong> {{ team_info.get('approved_targets', [])|length }}
+                                </p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if not identity_valid or not consent_valid %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="alert alert-danger border-0 shadow-sm">
+                <h5 class="alert-heading"><i class="bi bi-exclamation-triangle"></i> Setup Required</h5>
+                <p class="mb-0">Please ensure <code>identity.txt</code> and <code>consent.txt</code> files are properly configured before using the toolkit.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Tools Grid -->
+    <div class="row g-4">
+        <!-- Port Scanner -->
+        <div class="col-lg-4 col-md-6" id="port-scanner">
+            <div class="card tool-card h-100">
+                <div class="card-header bg-info text-white d-flex align-items-center">
+                    <i class="bi bi-search me-2"></i>
+                    <h5 class="mb-0">Port Scanner</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">Scan target for open TCP ports with banner grabbing</p>
+                    <form id="scanForm" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Target</label>
+                            <input type="text" class="form-control" name="target" placeholder="example.com or 192.168.1.100" required>
+                            <div class="invalid-feedback">Please enter a target</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Port Range</label>
+                            <input type="text" class="form-control" name="ports" value="1-1000" placeholder="1-1000 or 80,443,8080">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Threads</label>
+                            <input type="number" class="form-control" name="threads" value="50" min="1" max="100">
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress mb-2">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <small class="text-muted">Scanning in progress...</small>
+                        </div>
+                        <div class="operation-status"></div>
+                        <button type="submit" class="btn btn-info w-100" id="scanBtn" {{ 'disabled' if not identity_valid or not consent_valid }}>
+                            <i class="bi bi-play-fill me-2"></i>Start Scan
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Password Tester -->
+        <div class="col-lg-4 col-md-6" id="password-assessment">
+            <div class="card tool-card h-100">
+                <div class="card-header bg-warning text-dark d-flex align-items-center">
+                    <i class="bi bi-key me-2"></i>
+                    <h5 class="mb-0">Password Assessment</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">Test password strength offline (simulation mode only)</p>
+                    <form id="passwordForm" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Password File</label>
+                            <input type="file" class="form-control" name="file" accept=".txt" required>
+                            <small class="text-muted">One password per line</small>
+                            <div class="invalid-feedback">Please select a file</div>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress mb-2">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <small class="text-muted">Analyzing passwords...</small>
+                        </div>
+                        <div class="operation-status"></div>
+                        <button type="submit" class="btn btn-warning w-100" id="passwordBtn" {{ 'disabled' if not identity_valid }}>
+                            <i class="bi bi-play-fill me-2"></i>Start Test
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stress Tester -->
+        <div class="col-lg-4 col-md-6" id="load-testing">
+            <div class="card tool-card h-100">
+                <div class="card-header bg-danger text-white d-flex align-items-center">
+                    <i class="bi bi-speedometer2 me-2"></i>
+                    <h5 class="mb-0">Load Testing</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">Controlled load testing (max 200 clients)</p>
+                    <form id="stressForm" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Target URL</label>
+                            <input type="text" class="form-control" name="target" placeholder="http://example.com" required>
+                            <div class="invalid-feedback">Please enter a target URL</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label fw-bold">Clients</label>
+                                <input type="number" class="form-control" name="clients" value="50" min="1" max="200">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label fw-bold">Duration (sec)</label>
+                                <input type="number" class="form-control" name="duration" value="60" min="1" max="300">
+                            </div>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress mb-2">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <small class="text-muted">Running load test...</small>
+                        </div>
+                        <div class="operation-status"></div>
+                        <button type="submit" class="btn btn-danger w-100" id="stressBtn" {{ 'disabled' if not identity_valid or not consent_valid }}>
+                            <i class="bi bi-play-fill me-2"></i>Start Test
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Web Discovery -->
+        <div class="col-lg-4 col-md-6" id="web-discovery">
+            <div class="card tool-card h-100">
+                <div class="card-header bg-success text-white d-flex align-items-center">
+                    <i class="bi bi-globe me-2"></i>
+                    <h5 class="mb-0">Web Discovery</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">Directory enumeration and subdomain probing</p>
+                    <form id="footprintForm" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Target</label>
+                            <input type="text" class="form-control" name="target" placeholder="example.com" required>
+                            <div class="invalid-feedback">Please enter a target</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Threads</label>
+                            <input type="number" class="form-control" name="threads" value="10" min="1" max="50">
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress mb-2">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <small class="text-muted">Discovering...</small>
+                        </div>
+                        <div class="operation-status"></div>
+                        <button type="submit" class="btn btn-success w-100" id="footprintBtn" {{ 'disabled' if not identity_valid or not consent_valid }}>
+                            <i class="bi bi-play-fill me-2"></i>Start Discovery
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Packet Capture -->
+        <div class="col-lg-4 col-md-6" id="packet-capture">
+            <div class="card tool-card h-100">
+                <div class="card-header bg-secondary text-white d-flex align-items-center">
+                    <i class="bi bi-diagram-3 me-2"></i>
+                    <h5 class="mb-0">Packet Capture</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">Capture and analyze local network traffic</p>
+                    <form id="pcapForm" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Interface (optional)</label>
+                            <input type="text" class="form-control" name="interface" placeholder="eth0 or leave blank">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Packet Count</label>
+                            <input type="number" class="form-control" name="count" value="100" min="1" max="1000">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">BPF Filter (optional)</label>
+                            <input type="text" class="form-control" name="filter" placeholder="tcp port 80">
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress mb-2">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-secondary" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <small class="text-muted">Capturing packets...</small>
+                        </div>
+                        <div class="operation-status"></div>
+                        <button type="submit" class="btn btn-secondary w-100" id="pcapBtn" {{ 'disabled' if not identity_valid }}>
+                            <i class="bi bi-play-fill me-2"></i>Start Capture
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Generator -->
+        <div class="col-lg-4 col-md-6" id="report-generator">
+            <div class="card tool-card h-100">
+                <div class="card-header bg-primary text-white d-flex align-items-center">
+                    <i class="bi bi-file-earmark-text me-2"></i>
+                    <h5 class="mb-0">Report Generator</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">Generate consolidated reports (DOCX/PDF)</p>
+                    <form id="reportForm" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Input Directory</label>
+                            <input type="text" class="form-control" name="input_dir" value="output" placeholder="output">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Format</label>
+                            <select class="form-select" name="format">
+                                <option value="both">Both (DOCX + PDF)</option>
+                                <option value="docx">DOCX Only</option>
+                                <option value="pdf">PDF Only</option>
+                            </select>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress mb-2">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <small class="text-muted">Generating report...</small>
+                        </div>
+                        <div class="operation-status"></div>
+                        <button type="submit" class="btn btn-primary w-100" id="reportBtn" {{ 'disabled' if not identity_valid }}>
+                            <i class="bi bi-file-earmark-arrow-down me-2"></i>Generate Report
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1050;">
+    <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Finsecure</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,41 @@
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 status-dashboard">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-3 text-center mb-3 mb-md-0">
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="bi bi-{{ 'check-circle-fill text-success' if identity_valid else 'x-circle-fill text-danger' }} fs-1 mb-2"></i>
+                            <span class="status-badge {{ 'status-valid' if identity_valid else 'status-invalid' }}">
+                                {{ 'Valid' if identity_valid else 'Invalid' }}
+                            </span>
+                            <small class="text-muted mt-1">Identity</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center mb-3 mb-md-0">
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="bi bi-{{ 'check-circle-fill text-success' if consent_valid else 'x-circle-fill text-danger' }} fs-1 mb-2"></i>
+                            <span class="status-badge {{ 'status-valid' if consent_valid else 'status-invalid' }}">
+                                {{ 'Valid' if consent_valid else 'Invalid' }}
+                            </span>
+                            <small class="text-muted mt-1">Consent</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {% if identity_valid and team_info %}
+                        <div class="ps-md-3 border-start">
+                            <h6 class="mb-1"><strong>Team:</strong> {{ team_info.get('team_name', 'N/A') }}</h6>
+                            <p class="mb-0 text-muted small">
+                                <strong>Members:</strong> {{ team_info.get('members', [])|length }} 
+                                | <strong>Approved Targets:</strong> {{ team_info.get('approved_targets', [])|length }}
+                            </p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

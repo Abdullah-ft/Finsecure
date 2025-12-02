@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Port Scanner - Finsecure{% endblock %}
+{% block body_class %}module-page module-port-scanner{% endblock %}
+
+{% block content %}
+<div class="module-page container-fluid px-4 pt-4">
+    {% include "status_header.html" %}
+
+    <div class="row g-4 mt-2">
+        <div class="col-lg-6 col-xl-5">
+            <div class="card tool-card h-100">
+                <div class="card-header bg-info text-white d-flex align-items-center">
+                    <i class="bi bi-search me-2"></i>
+                    <h5 class="mb-0">Port Scanner</h5>
+                </div>
+                <div class="card-body">
+                    <form id="scanForm" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Target</label>
+                            <input type="text" class="form-control" name="target" placeholder="example.com or 192.168.1.100" required>
+                            <div class="invalid-feedback">Please enter a target</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Port Range</label>
+                            <input type="text" class="form-control" name="ports" value="1-1000" placeholder="1-1000 or 80,443,8080">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Threads</label>
+                            <input type="number" class="form-control" name="threads" value="50" min="1" max="100">
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress mb-2">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="operation-status"></div>
+                        <button type="submit" class="btn btn-info w-100" id="scanBtn" {{ 'disabled' if not identity_valid or not consent_valid }}>
+                            <i class="bi bi-play-fill me-2"></i>Start Scan
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-xl-7">
+            <div class="card glass-card h-100">
+                <div class="card-header bg-transparent border-0 text-light d-flex align-items-center">
+                    <i class="bi bi-graph-up-arrow me-2"></i>
+                    <h6 class="mb-0">Latest Activity & Examples</h6>
+                </div>
+                <div class="card-body text-light">
+                    <p class="small mb-2">Try quick scans against approved lab targets from <code>consent.txt</code>:</p>
+                    <ul class="small mb-2">
+                        <li><code>localhost</code> or <code>127.0.0.1</code> on ports <code>1-1000</code></li>
+                        <li><code>example.com</code> on common ports like <code>80, 443</code></li>
+                        <li>Lab host: <code>192.168.1.100</code> (if available)</li>
+                    </ul>
+                    <p class="small mb-0">
+                        1) Enter an approved target from <code>consent.txt</code>.<br>
+                        2) Set a safe port range (e.g. <code>1-1000</code>) and thread count.<br>
+                        3) Run the scan and review open ports in the Results page.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "toast.html" %}
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}
+
+

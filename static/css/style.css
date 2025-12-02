@@ -1,0 +1,637 @@
+/* Finsecure Toolkit - Modern App Styling */
+
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #0dcaf0;
+    --dark-color: #212529;
+    --light-color: #f8f9fa;
+    --border-radius: 12px;
+    --shadow: 0 2px 10px rgba(0,0,0,0.1);
+    --shadow-hover: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: radial-gradient(circle at top left, #1f2937 0%, #020617 35%, #000000 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    padding-bottom: 2rem;
+}
+
+/* Navigation */
+.navbar {
+    box-shadow: 0 2px 18px rgba(0,0,0,0.35);
+    backdrop-filter: blur(12px);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+}
+
+.finsecure-navbar {
+    background: linear-gradient(90deg, rgba(13, 110, 253, 0.95), rgba(111, 66, 193, 0.95)) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+}
+
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link:hover {
+    color: #fff;
+    text-shadow: 0 0 8px rgba(56,189,248,0.8), 0 0 16px rgba(79,70,229,0.8);
+    transition: color 0.2s ease, text-shadow 0.3s ease, transform 0.2s ease;
+    transform: translateY(-1px);
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.card-header {
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+    font-weight: 600;
+    padding: 1.25rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Tool Cards */
+.tool-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.tool-card .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.tool-card form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-valid {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-invalid {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Forms */
+.form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    padding: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+    transform: translateY(-1px);
+}
+
+.form-control:invalid:not(:placeholder-shown) {
+    border-color: var(--danger-color);
+}
+
+.form-control:valid:not(:placeholder-shown) {
+    border-color: var(--success-color);
+}
+
+/* Buttons */
+.btn {
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 0 0 rgba(56,189,248,0.0);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 12px rgba(56,189,248,0.6), 0 0 24px rgba(129,140,248,0.7);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Progress Bars */
+.progress {
+    height: 8px;
+    border-radius: 10px;
+    background-color: #e9ecef;
+    overflow: hidden;
+}
+
+.progress-bar {
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+/* Operation Status */
+.operation-status {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    display: none;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.operation-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border: 2px solid #c3e6cb;
+    color: #155724;
+}
+
+.operation-error {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    border: 2px solid #f5c6cb;
+    color: #721c24;
+}
+
+.operation-info {
+    background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+    border: 2px solid #bee5eb;
+    color: #0c5460;
+}
+
+/* Alerts */
+.alert {
+    border-radius: var(--border-radius);
+    border: none;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+}
+
+.alert-heading {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+/* Toast Notifications */
+.toast {
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-hover);
+    min-width: 300px;
+}
+
+.toast-header {
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    font-weight: 600;
+}
+
+/* Container */
+.container-fluid {
+    max-width: 1400px;
+}
+
+/* Status Dashboard */
+.status-dashboard {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
+    }
+    
+    .tool-icon {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    body {
+        background: #f8f9fa;
+    }
+    
+    .card-header h5 {
+        font-size: 1rem;
+    }
+}
+
+/* Loading States */
+.loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Footer */
+footer {
+    margin-top: 3rem;
+    padding: 1.5rem 0;
+    background: rgba(33, 37, 41, 0.95) !important;
+    backdrop-filter: blur(10px);
+    border-top: 2px solid rgba(255,255,255,0.1);
+}
+
+/* Auth Page */
+.auth-page {
+    background-image:
+        linear-gradient(135deg, rgba(15,23,42,0.9), rgba(30,64,175,0.8)),
+        url("https://images.pexels.com/photos/1181243/pexels-photo-1181243.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.auth-overlay {
+    min-height: calc(100vh - 60px);
+}
+
+.auth-card-wrapper {
+    max-width: 420px;
+    width: 100%;
+}
+
+.auth-card {
+    background: radial-gradient(circle at top, rgba(15,23,42,0.95), rgba(15,23,42,0.85));
+    border-radius: 18px;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+    backdrop-filter: blur(18px);
+}
+
+.auth-logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #38bdf8, #6366f1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 30px rgba(56,189,248,0.8);
+}
+
+.auth-logo i {
+    font-size: 1.7rem;
+    color: #0f172a;
+}
+
+.text-light-50 {
+    color: rgba(248,250,252,0.7);
+}
+
+.auth-card .form-control,
+.auth-card .input-group-text {
+    background-color: rgba(15,23,42,0.9);
+    border-color: rgba(148,163,184,0.5);
+    color: #e5e7eb;
+}
+
+.auth-card .form-control::placeholder {
+    color: rgba(148,163,184,0.8);
+}
+
+.auth-card .input-group-text {
+    border-right: 0;
+}
+
+.auth-card .form-control {
+    border-left: 0;
+}
+
+.auth-card .btn-primary {
+    background: linear-gradient(135deg, #38bdf8, #6366f1);
+}
+
+.global-warning {
+    background: rgba(245, 158, 11, 0.95);
+}
+
+.module-page {
+    animation: fadeIn 0.5s ease;
+    animation: fadeIn 0.6s ease;
+}
+
+.glass-card {
+    background: radial-gradient(circle at top left, rgba(15,23,42,0.9), rgba(15,23,42,0.85));
+    border-radius: 18px;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    box-shadow: 0 18px 45px rgba(0,0,0,0.6);
+}
+
+/* Module-specific transparent backgrounds */
+body.module-page {
+    background-attachment: fixed;
+}
+
+body.module-port-scanner {
+    background-image:
+        radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(129,140,248,0.25), transparent 55%),
+        radial-gradient(circle at top right, #020617 0%, #000000 55%);
+}
+
+body.module-password-assessment {
+    background-image:
+        radial-gradient(circle at top left, rgba(250,204,21,0.25), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(248,250,252,0.08), transparent 55%),
+        radial-gradient(circle at top right, #020617 0%, #000000 55%);
+}
+
+body.module-load-testing {
+    background-image:
+        radial-gradient(circle at top left, rgba(248,113,113,0.3), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(59,130,246,0.25), transparent 55%),
+        radial-gradient(circle at top right, #020617 0%, #000000 55%);
+}
+
+body.module-web-discovery {
+    background-image:
+        radial-gradient(circle at top left, rgba(52,211,153,0.25), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(56,189,248,0.2), transparent 55%),
+        radial-gradient(circle at top right, #020617 0%, #000000 55%);
+}
+
+body.module-packet-capture {
+    background-image:
+        radial-gradient(circle at top left, rgba(148,163,184,0.3), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(56,189,248,0.25), transparent 55%),
+        radial-gradient(circle at top right, #020617 0%, #000000 55%);
+}
+
+body.module-report-generator {
+    background-image:
+        radial-gradient(circle at top left, rgba(96,165,250,0.25), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(52,211,153,0.25), transparent 55%),
+        radial-gradient(circle at top right, #020617 0%, #000000 55%);
+}
+
+/* Neon tool cards */
+.module-page .tool-card {
+    background: radial-gradient(circle at top left, rgba(15,23,42,0.98), rgba(15,23,42,0.9));
+    border-radius: 18px;
+    border: 1px solid rgba(148,163,184,0.35);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+    backdrop-filter: blur(16px);
+    position: relative;
+    overflow: hidden;
+}
+
+.module-page .tool-card::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: conic-gradient(from 180deg, rgba(59,130,246,0.45), rgba(56,189,248,0.45), rgba(129,140,248,0.4), rgba(244,114,182,0.35), rgba(59,130,246,0.45));
+    opacity: 0;
+    z-index: -1;
+    filter: blur(8px);
+    transition: opacity 0.4s ease;
+}
+
+.module-page .tool-card:hover::before {
+    opacity: 1;
+}
+
+.module-page .tool-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 55px rgba(0,0,0,0.85);
+}
+
+.module-page .card-header {
+    position: relative;
+    overflow: hidden;
+}
+
+.module-page .card-header::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -40%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(248,250,252,0.46), transparent);
+    transform: skewX(-20deg);
+    opacity: 0;
+}
+
+.module-page .tool-card:hover .card-header::after {
+    opacity: 1;
+    animation: shimmer 1s forwards;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(0) skewX(-20deg);
+    }
+    100% {
+        transform: translateX(260%) skewX(-20deg);
+    }
+}
+
+/* Floating neon badges and status */
+.status-dashboard {
+    background: radial-gradient(circle at top left, rgba(15,23,42,0.96), rgba(15,23,42,0.9));
+    border-radius: 18px;
+    border: 1px solid rgba(148,163,184,0.35);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.75);
+}
+
+.status-badge {
+    animation: neonPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes neonPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 rgba(56,189,248,0.0);
+        transform: translateY(0);
+    }
+    50% {
+        box-shadow: 0 0 16px rgba(56,189,248,0.7), 0 0 32px rgba(129,140,248,0.7);
+        transform: translateY(-1px);
+    }
+}
+
+/* Subtle float for glass cards */
+.glass-card {
+    animation: floatUp 6s ease-in-out infinite;
+}
+
+/* Ensure Latest Activity / side content text fits and stays readable */
+.glass-card .card-body {
+    font-size: 1.25rem;
+    line-height: 1.7;
+    max-height: 320px;
+    overflow-y: auto;
+    word-wrap: break-word;
+}
+
+.glass-card .card-body p,
+.glass-card .card-body ul,
+.glass-card .card-body li {
+    color: rgba(248, 250, 252, 0.92);
+}
+
+/* Team / status container text colors */
+.status-dashboard,
+.status-dashboard h6,
+.status-dashboard p,
+.status-dashboard small,
+.status-dashboard strong {
+    color: rgba(248, 250, 252, 0.95) !important;
+}
+
+.status-dashboard .text-muted {
+    color: rgba(209, 213, 219, 0.9) !important;
+}
+
+@keyframes floatUp {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.card {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Focus States */
+*:focus {
+    outline: none;
+}
+
+.form-control:focus,
+.form-select:focus,
+.btn:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}

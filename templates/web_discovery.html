@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Web Discovery - Finsecure{% endblock %}
+{% block body_class %}module-page module-web-discovery{% endblock %}
+
+{% block content %}
+<div class="module-page container-fluid px-4 pt-4">
+    {% include "status_header.html" %}
+
+    <div class="row g-4 mt-2">
+        <div class="col-lg-6 col-xl-5">
+            <div class="card tool-card h-100">
+                <div class="card-header bg-success text-white d-flex align-items-center">
+                    <i class="bi bi-globe me-2"></i>
+                    <h5 class="mb-0">Web Discovery</h5>
+                </div>
+                <div class="card-body">
+                    <form id="footprintForm" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Target</label>
+                            <input type="text" class="form-control" name="target" placeholder="example.com" required>
+                            <div class="invalid-feedback">Please enter a target</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Threads</label>
+                            <input type="number" class="form-control" name="threads" value="10" min="1" max="50">
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress mb-2">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="operation-status"></div>
+                        <button type="submit" class="btn btn-success w-100" id="footprintBtn" {{ 'disabled' if not identity_valid or not consent_valid }}>
+                            <i class="bi bi-play-fill me-2"></i>Start Discovery
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-xl-7">
+            <div class="card glass-card h-100">
+                <div class="card-header bg-transparent border-0 text-light d-flex align-items-center">
+                    <i class="bi bi-diagram-3 me-2"></i>
+                    <h6 class="mb-0">Discovery Map & Examples</h6>
+                </div>
+                <div class="card-body text-light">
+                    <p class="small mb-2">Recommended discovery targets from <code>consent.txt</code>:</p>
+                    <ul class="small mb-2">
+                        <li><code>http://testphp.vulnweb.com</code> – intentionally vulnerable lab app</li>
+                        <li><code>http://example.com</code> – safe demo site</li>
+                        <li><code>http://localhost</code> – your own local web server</li>
+                    </ul>
+                    <p class="small mb-0">
+                        1) Enter an approved HTTP target (with <code>http://</code> prefix).<br>
+                        2) Set a reasonable thread count (e.g. 5–10) for enumeration.<br>
+                        3) Review discovered paths/subdomains in the JSON/HTML output.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "toast.html" %}
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}
+
+
